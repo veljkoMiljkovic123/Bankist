@@ -79,7 +79,47 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
-console.log(containerMovements.innerHTML);
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+createUsernames(accounts);
+console.log(account2.username);
+
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, cur) => acc + cur, 0);
+  labelSumIn.innerHTML = ` ${incomes}€`;
+
+  const out = movements
+    .filter(mov => mov < 0)
+    .reduce((arr, cur) => arr + cur, 0);
+  labelSumOut.innerHTML = `${Math.abs(out)}€`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter(el => el > 1)
+    .reduce((acc, cur) => acc + cur);
+  labelSumInterest.innerHTML = `${interest}€`;
+};
+calcDisplaySummary(account1.movements);
+
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, cur) => {
+    return acc + cur;
+  }, 0);
+  labelBalance.innerHTML = `${balance}€`;
+};
+
+calcDisplayBalance(account1.movements);
+/*     */
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -133,3 +173,96 @@ currencies.forEach(function (value, key, map) {
 };
 
 checkDogs([9, 16, 6, 8, 3], [10, 5, 6, 1, 4]); */
+
+/* const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const newMovements = movements.map(mov => mov * 1.1);
+
+console.log(newMovements); */
+
+/* const movements2 = [];
+for (let mov of movements) {
+  movements2.push(mov * 1.2);
+}
+
+console.log(movements2); */
+
+/* const usernames = accounts.map(function (acc, i) {
+  return acc.owner;
+});
+
+console.log(usernames); */
+
+// filter method
+/* const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const deposit = movements.filter(mov => mov > 0);
+console.log(deposit);
+// for of
+const deposits = [];
+for (const mov of movements) {
+  if (mov > 0) {
+    deposits.push(mov);
+  }
+}
+console.log(deposits);
+
+const withdrawals = movements.filter(el => el < 0);
+console.log(withdrawals);
+
+const balance = movements.reduce((acc, cur, i, arr) => {
+  console.log(`Iteration number ${i}: ${acc}`);
+
+  return acc + cur;
+}, 100);
+
+console.log(balance);
+
+let sum = 0;
+for (const mov of movements) {
+  sum += mov;
+}
+console.log(sum); */
+
+//Maximum value
+/* const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const maxMov = movements.reduce((acc, mov) => {
+  if (acc > mov) return acc;
+  else return mov;
+}, movements[0]);
+
+console.log(maxMov); */
+
+/* Coding Challenge #2
+Let's go back to Julia and Kate's study about dogs. This time, they want to convert 
+dog ages to human ages and calculate the average age of the dogs in their study */
+
+/* const calcAverageHumanAge = function (ages) {
+  const dogHumanAge = ages.map(age => (age <= 2 ? 2 * age : 16 + age * 4));
+  console.log(dogHumanAge);
+  //vise od 18 godina
+  const dogHumanMore18 = dogHumanAge.filter(dog => {
+    return dog > 18;
+  });
+  console.log(dogHumanMore18); */
+// prosecna godina ovih starijih od 18
+/*   const average =
+    dogHumanMore18.reduce((acc, cur) => {
+      return acc + cur;
+    }, 0) / dogHumanMore18.length;
+
+  return average;
+};
+
+const avg1 = calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+console.log(avg1); */
+
+//uzimamo sce movements deposits pretvaramo ih iz eura u dolare i na kraju sabiramo ih sve
+
+/* const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const totalDepositsUSD = movements
+  .filter(mov => mov > 0)
+  .map(el => el * 1.1)
+  .reduce((acc, curr) => acc + curr);
+console.log(totalDepositsUSD); */
