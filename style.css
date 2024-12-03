@@ -83,6 +83,10 @@ nav {
   color: #777;
 }
 
+.login-data {
+  font-weight: bold;
+}
+
 /* MAIN */
 .app {
   position: relative;

@@ -61,9 +61,12 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
-  movements.forEach(function (mov, i) {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -182,6 +185,52 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
+//lOAN - se odobrava ako imamo najmanje 1 depozit sa najmanje 10% od kolicine koju zahtevamo za pozajmicu
+
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+  if (
+    amount > 0 &&
+    currentAccount.movements.some(move => move >= amount * 0.1)
+  ) {
+    currentAccount.movements.push(amount);
+    updateUi(currentAccount);
+  }
+  inputLoanAmount.value = '';
+});
+
+//Close acount
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+
+    // Delete acc
+    accounts.splice(index, 1);
+
+    // Hide ui
+    containerApp.style.opacity = '0';
+
+    inputCloseUsername.value = '';
+    inputClosePin.value = '';
+    labelWelcome.innerHTML = 'Log in to get started';
+  }
+});
+
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
 /*     */
 
 /////////////////////////////////////////////////
@@ -373,3 +422,43 @@ for (let acc of accounts) {
     console.log(acc);
   }
 } */
+/* const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+console.log(movements);
+console.log(movements.includes(-130));
+
+const anyDeposits = movements.some(mov => mov > 2000);
+console.log(anyDeposits); */
+
+/* const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+console.log(movements.every(mov => mov > 0));
+console.log(account4.movements.every(mov => mov > 0)); */
+
+/* const arr = [[1, 2, 3], [4, 5, [6, 6, 6]], 7, 8];
+const separateElementArr = arr.flat(2);
+console.log(separateElementArr);
+const arrDeep = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+console.log(arrDeep.flat(2));
+
+console.log(
+  accounts.flatMap(acc => acc.movements).reduce((acc, cur) => acc + cur)
+); */
+
+// Strings
+/* const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners.sort()); */
+
+//Numbers
+/* const movements = [200, 450, -400, 3000, -650, -130, 70, 1300]; */
+
+/* movements.sort((a, b) => {
+  if (a > b) return 1;
+  if (a < b) return -1;
+});
+console.log(movements); */
+
+/* movements.sort((a, b) => a - b);
+console.log(movements);
+
+movements.sort((a, b) => b - a);
+console.log(movements); */
